@@ -1,68 +1,33 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from "react";
 
+function App() {
+  const [gamesList, setGamesList] = useState([]);
 
-export const App = () => {
+  const API_KEY = "26ca020995fa4556beee331585dac50d";
 
-    fetch('https://api.rawg.io/api/platforms?key=26ca020995fa4556beee331585dac50d')
-.then((response) => {
-    response = response.json()
-    response.then((result) => {
-        console.log(result)
-    })
-.then(data => {
+  useEffect(() => {
+    fetch(`https://api.rawg.io/api/platforms?key=${API_KEY}`)
+      .then((response) => response.json())
+      .then((data) => {
+        // console.log(data);
+        // console.log(data.results);
+        setGamesList(data.results);
+      });
+  }, []);
 
-})
-})
-.catch(function(error) {
-  console.log(error);
-});
+  return (
+    <>
+      <h1>Les derniers jeux vidéos en vogue</h1>
 
-    return (
-
-
-
-<div className="jeuxVideos">
-    <h1>Derniers jeux vidéos</h1>
-    <ul id="listeJeuxVideos">
-        <li></li>
-    </ul>
-</div>
-    );
+      <ul>
+        {gamesList.map((g) => (
+          <li key={g.id}>
+            {g.id} - {g.name}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
 }
 
-
-
-/*
-
-    function createNode(element) {
-        return document.createElement(element);
-    }
-    
-    function append(parent, el) {
-        return parent.appendChild(el);
-    }
-    
-    const ul = document.getElementById('listeJeux');
-    const url = 'https://api.rawg.io/api/platforms?key=26ca020995fa4556beee331585dac50d';
-    
-    fetch(url)
-    .then((resp) => resp.json())
-    .then(function(data) {
-        let jeux = data.results;
-        return jeux.map(function(jeu) {
-            let li = createNode('li');
-            let img = createNode('img');
-            let span = createNode('span');
-        img.src = jeu.picture.medium;
-        span.innerHTML = `${jeu.name.first} ${jeu.name.last}`;
-        append(li, img);
-        append(li, span);
-        append(ul, li);
-        })
-    })
-    
-    .catch(function(error) {
-    
-    });
-*/
+export default App;
